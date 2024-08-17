@@ -34,6 +34,7 @@ public class ObjectPool : MonoBehaviour
         {
             poolObject = Instantiate(ObjectToPool, Vector2.zero, Quaternion.identity);
             poolObject.transform.SetParent(_poolParent.transform);
+            poolObject.transform.name = $"BulletInstance{i}";
             poolObject.SetActive(false);
             _poolObjects.Add(poolObject);
         }
