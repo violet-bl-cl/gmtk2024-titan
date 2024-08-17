@@ -124,7 +124,7 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.34f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.34f, 0.6f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.34f, 0.9f));
             //Bottom animation
             SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.35f, 0.9f));
         }
@@ -134,7 +134,7 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.34f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.34f, 0.6f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.34f, 0.9f));
             //Bottom animation
             SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.35f, 0.9f));
         }
