@@ -116,7 +116,7 @@ public class PlayerController : InputHandler
         }
 
 
-         
+
         //Player Animation Status
         if (isLeftPressed)
         {
@@ -142,142 +142,142 @@ public class PlayerController : InputHandler
         _botStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
         _topStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
         //Player Movement, Jump, Crouch, Shoot
-        //if (isAnyDirectionKeyPressed && isGround && !isCrouch)
-        //{
-        //    if (isLookUp && !isShoot)
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
-        //    }
-        //    else if (isLookUp && isShoot)
-        //    {
-        //        Shoot(Direction.Up);
-        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
-        //    }
-        //    else if (!isLookUp && isShoot)
-        //    {
-        //        Shoot(_direction);
-        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
-        //    }
-        //    else
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopMoveRight;
-        //    }
-        //    _playerBotAction.Action = PlayerFSM.BotMoveLeft;
-        //}
-        //else if (isAnyDirectionKeyPressed && !isGround)
-        //{
-        //    if (isLookUp && !isShoot && !isCrouch)
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
-        //    }
-        //    else if (isLookUp && isShoot && !isCrouch)
-        //    {
-        //        Shoot(Direction.Up);
-        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
-        //    }
-        //    else if (!isLookUp && isShoot && !isCrouch)
-        //    {
-        //        Shoot(_direction);
-        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
-        //    }
-        //    else if (!isLookUp && isCrouch && isShoot)
-        //    {
-        //        Shoot(Direction.Down);
-        //        _playerTopAction.Action = PlayerFSM.TopShootDown;
-        //    }
-        //    else
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopJumpRight;
-        //    }
-        //    _playerBotAction.Action = PlayerFSM.BotJumpLeft;
-        //}
-        //else if (isAnyDirectionKeyNotPressed && !isGround)
-        //{
-        //    if (isCrouch && !isLookUp && !isShoot)
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopAimDown;
-        //    }
-        //    else if (isLookUp && !isCrouch && !isShoot)
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
-        //    }
-        //    else if (isLookUp && !isCrouch && isShoot)
-        //    {
-        //        Shoot(Direction.Up);
-        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
-        //    }
-        //    else if (!isLookUp && isCrouch && isShoot)
-        //    {
-        //        Shoot(Direction.Down);
-        //        _playerTopAction.Action = PlayerFSM.TopShootDown;
-        //    }
-        //    else
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopIdle;
-        //    }
-        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
-        //}
-        //else if (isAnyDirectionKeyNotPressed && !isGround)
-        //{
-//
-        //    _playerTopAction.Action = isCrouch ? PlayerFSM.TopAimDown : PlayerFSM.TopIdle;
-        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
-        //}
-        //else if (isAnyDirectionKeyPressed && isCrouch && isGround)
-        //{
-        //    if (!isLookUp && isShoot)
-        //    {
-        //        if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
-        //        Shoot(_direction);
-        //        _playerFullAction.Action = PlayerFSM.FullCrouchShoot;
-        //    }
-        //    else
-        //    {
-        //        _playerFullAction.Action = PlayerFSM.FullCrouchMove;
-        //    }
-        //}
-        //else if (isCrouch && isGround)
-        //{
-        //    //calltime occurs
-        //    if (!isLookUp && isShoot)
-        //    {
-        //        if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
-        //        Shoot(_direction);
-        //        _playerFullAction.Action = PlayerFSM.FullCrouchShoot;
-        //    }
-        //    else
-        //    {
-        //        _playerFullAction.Action = PlayerFSM.FullCrouch;
-        //    }
-        //}
-        //else if (!isCrouch && !isGround)
-        //{
-        //    _playerTopAction.Action = (!isLookUp && isShoot) ? PlayerFSM.TopShootRight : PlayerFSM.TopIdle;
-        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
-        //}
-        //else
-        //{
-        //    if (isLookUp && !isShoot)
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
-        //    }
-        //    else if (isLookUp && isShoot)
-        //    {
-        //        Shoot(Direction.Up);
-        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
-        //    }
-        //    else if (!isLookUp && isShoot)
-        //    {
-        //        Shoot(_direction);
-        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
-        //    }
-        //    else
-        //    {
-        //        _playerTopAction.Action = PlayerFSM.TopIdle;
-//
-        //    }
-        //    _playerBotAction.Action = PlayerFSM.BotIdle;
-        //}
+        if (isAnyDirectionKeyPressed && isGround && !isCrouch)
+        {
+            if (isLookUp && !isShoot)
+            {
+                _topStatus.PlayerAction = Action.TopAimUp;
+            }
+            else if (isLookUp && isShoot)
+            {
+                Shoot(Direction.Up);
+                _topStatus.PlayerAction = Action.TopShootUp;
+            }
+            else if (!isLookUp && isShoot)
+            {
+                Shoot(_direction);
+                _topStatus.PlayerAction = Action.TopShootRight;
+            }
+            else
+            {
+                _topStatus.PlayerAction = Action.TopMoveRight;
+            }
+            _botStatus.PlayerAction = Action.BotMoveRight;
+        }
+        else if (isAnyDirectionKeyPressed && !isGround)
+        {
+            if (isLookUp && !isShoot && !isCrouch)
+            {
+                _topStatus.PlayerAction = Action.TopAimUp;
+            }
+            else if (isLookUp && isShoot && !isCrouch)
+            {
+                Shoot(Direction.Up);
+                _topStatus.PlayerAction = Action.TopShootUp;
+            }
+            else if (!isLookUp && isShoot && !isCrouch)
+            {
+                Shoot(_direction);
+                _topStatus.PlayerAction = Action.TopShootRight;
+            }
+            else if (!isLookUp && isCrouch && isShoot)
+            {
+                Shoot(Direction.Down);
+                _topStatus.PlayerAction = Action.TopShootDown;
+            }
+            else
+            {
+                _topStatus.PlayerAction = Action.TopJumpRight;
+            }
+            _botStatus.PlayerAction = Action.BotJumpRight;
+        }
+        else if (isAnyDirectionKeyNotPressed && !isGround)
+        {
+            if (isCrouch && !isLookUp && !isShoot)
+            {
+                _topStatus.PlayerAction = Action.TopAimDown;
+            }
+            else if (isLookUp && !isCrouch && !isShoot)
+            {
+                _topStatus.PlayerAction = Action.TopAimUp;
+            }
+            else if (isLookUp && !isCrouch && isShoot)
+            {
+                Shoot(Direction.Up);
+                _topStatus.PlayerAction = Action.TopShootUp;
+            }
+            else if (!isLookUp && isCrouch && isShoot)
+            {
+                Shoot(Direction.Down);
+                _topStatus.PlayerAction = Action.TopShootDown;
+            }
+            else
+            {
+                _topStatus.PlayerAction = Action.TopIdle;
+            }
+            _botStatus.PlayerAction = Action.BotJumpIdle;
+        }
+        else if (isAnyDirectionKeyNotPressed && !isGround)
+        {
+
+            _topStatus.PlayerAction = isCrouch ? Action.TopAimDown : Action.TopIdle;
+            _botStatus.PlayerAction = Action.BotJumpIdle;
+        }
+        else if (isAnyDirectionKeyPressed && isCrouch && isGround)
+        {
+            if (!isLookUp && isShoot)
+            {
+                if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
+                Shoot(_direction);
+                _fullStatus.PlayerAction = Action.FullCrouchShoot;
+            }
+            else
+            {
+                _fullStatus.PlayerAction = Action.FullCrouchMoveRight;
+            }
+        }
+        else if (isCrouch && isGround)
+        {
+            //calltime occurs
+            if (!isLookUp && isShoot)
+            {
+                if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
+                Shoot(_direction);
+                _fullStatus.PlayerAction = Action.FullCrouchShoot;
+            }
+            else
+            {
+                _fullStatus.PlayerAction = Action.FullCrouch;
+            }
+        }
+        else if (!isCrouch && !isGround)
+        {
+            _topStatus.PlayerAction = (!isLookUp && isShoot) ? Action.TopShootRight : Action.TopIdle;
+            _botStatus.PlayerAction = Action.BotJumpIdle;
+        }
+        else
+        {
+            if (isLookUp && !isShoot)
+            {
+                _topStatus.PlayerAction = Action.TopAimUp;
+            }
+            else if (isLookUp && isShoot)
+            {
+                Shoot(Direction.Up);
+                _topStatus.PlayerAction = Action.TopShootUp;
+            }
+            else if (!isLookUp && isShoot)
+            {
+                Shoot(_direction);
+                _topStatus.PlayerAction = Action.TopShootRight;
+            }
+            else
+            {
+                _topStatus.PlayerAction = Action.TopIdle;
+
+            }
+            _botStatus.PlayerAction = Action.BotIdle;
+        }
 
     }
 
@@ -309,6 +309,13 @@ public class PlayerController : InputHandler
         if (_shootCoroutine == null)
         {
             GameObject bullet = ObjectPool.Instance.GetObjectPool();
+            if (bullet != null)
+            {
+                Projectile projectile = bullet.GetComponent<Projectile>();
+                projectile.BulletDirection = direction;
+                projectile.transform.position = transform.position;
+                projectile.gameObject.SetActive(true);
+            }
             _shootCoroutine = StartCoroutine(nameof(DelayShoot));
         }
     }
