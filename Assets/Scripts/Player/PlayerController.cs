@@ -126,7 +126,7 @@ public class PlayerController : InputHandler
             //Top animation
             SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.34f, 0.6f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.35f, -0.3f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.35f, 0.9f));
         }
         else if (isRightPressed)
         {
@@ -136,7 +136,7 @@ public class PlayerController : InputHandler
             //Top animation
             SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.34f, 0.6f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.35f, -0.3f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.35f, 0.9f));
         }
         _fullStatus.gameObject.SetActive(isCrouch && isGround);
         _botStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
