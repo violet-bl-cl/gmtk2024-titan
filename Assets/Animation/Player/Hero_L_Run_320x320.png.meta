@@ -113,12 +113,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_1
       rect:
         serializedVersion: 2
-        x: 69
+        x: 320
         y: 0
-        width: 152
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.22952798, y: 0.5502725}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_2
       rect:
         serializedVersion: 2
-        x: 418
+        x: 640
         y: 0
-        width: 113
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.057087585, y: 0.5428247}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_3
       rect:
         serializedVersion: 2
-        x: 678
+        x: 960
         y: 0
-        width: 192
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.3200121, y: 0.5502725}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,12 +176,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_4
       rect:
         serializedVersion: 2
-        x: 978
+        x: 1280
         y: 0
-        width: 223
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.34561226, y: 0.5508448}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -197,12 +197,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_5
       rect:
         serializedVersion: 2
-        x: 1329
+        x: 1600
         y: 0
-        width: 141
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.3430479, y: 0.553198}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -218,12 +218,12 @@ TextureImporter:
       name: Hero_L_Run_320x320_6
       rect:
         serializedVersion: 2
-        x: 1639
+        x: 1920
         y: 0
-        width: 217
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.32557222, y: 0.5917723}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -236,22 +236,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_L_Run_320x320_8
+      name: Hero_L_Run_320x320_0
       rect:
         serializedVersion: 2
-        x: 1939
+        x: 0
         y: 0
-        width: 266
+        width: 320
         height: 320
-      alignment: 9
-      pivot: {x: 0.3126248, y: 0.5833109}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2ca65576d3a9329399b8362c12dc2bb3
-      internalID: 1635067163
+      spriteID: 3595b20ba6e9f184d8e39039dbbb6efd
+      internalID: 1444977894
       vertices: []
       indices: 
       edges: []
@@ -274,9 +274,6 @@ TextureImporter:
       Hero_L_Run_320x320_4: 1978245353
       Hero_L_Run_320x320_5: -121992779
       Hero_L_Run_320x320_6: -595585360
-      Hero_L_Run_320x320_7: 862374362
-      Hero_L_Run_320x320_8: 1635067163
-      Hero_L_Run_320x320_9: -1730539999
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

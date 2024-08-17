@@ -113,12 +113,12 @@ TextureImporter:
       name: Hero_U_Idle_320x320_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 40
-        width: 300
-        height: 270
-      alignment: 9
-      pivot: {x: 0.1944445, y: 0.5360083}
+        x: 0
+        y: 0
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: Hero_U_Idle_320x320_1
       rect:
         serializedVersion: 2
-        x: 350
-        y: 40
-        width: 290
-        height: 270
-      alignment: 9
-      pivot: {x: 0.16475093, y: 0.5308643}
+        x: 320
+        y: 0
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: Hero_U_Idle_320x320_2
       rect:
         serializedVersion: 2
-        x: 670
-        y: 40
-        width: 290
-        height: 280
-      alignment: 9
-      pivot: {x: 0.16475093, y: 0.5248017}
+        x: 640
+        y: 0
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,12 +176,12 @@ TextureImporter:
       name: Hero_U_Idle_320x320_4
       rect:
         serializedVersion: 2
-        x: 1300
-        y: 30
-        width: 300
-        height: 280
-      alignment: 9
-      pivot: {x: 0.1990743, y: 0.5496032}
+        x: 1280
+        y: 0
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -194,22 +194,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Hero_U_Idle_320x320_5
+      name: Hero_U_Idle_320x320_3
       rect:
         serializedVersion: 2
-        x: 990
-        y: 40
-        width: 290
-        height: 271
-      alignment: 9
-      pivot: {x: 0.19827586, y: 0.5358754}
+        x: 960
+        y: 0
+        width: 320
+        height: 320
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b330c9064a638473b473ff5eb27a1c9
-      internalID: 1248739418
+      spriteID: d947656f9454dbb4bafa19b549851908
+      internalID: -1796658026
       vertices: []
       indices: 
       edges: []
@@ -230,7 +230,6 @@ TextureImporter:
       Hero_U_Idle_320x320_2: 128232225
       Hero_U_Idle_320x320_3: -1796658026
       Hero_U_Idle_320x320_4: 1351181610
-      Hero_U_Idle_320x320_5: 1248739418
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
