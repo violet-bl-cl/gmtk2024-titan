@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : InputHandler
@@ -122,21 +123,21 @@ public class PlayerController : InputHandler
         {
             _direction = Direction.Left;
             //Full Animation
-            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.34f, -1.0f));
+            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.34f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.1f, 0.9f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.35f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.1f, 0.9f));
         }
         else if (isRightPressed)
         {
             _direction = Direction.Right;
             //Full Animation
-            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.34f, -1.0f));
+            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.34f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.1f, 0.9f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.35f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.1f, 0.9f));
         }
         _fullStatus.gameObject.SetActive(isCrouch && isGround);
         _botStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
@@ -313,13 +314,36 @@ public class PlayerController : InputHandler
             {
                 Projectile projectile = bullet.GetComponent<Projectile>();
                 projectile.BulletDirection = direction;
-                projectile.transform.position = transform.position;
+                projectile.BulletActiveTime = 5.0f;
+                projectile.transform.position = GetTransformDirection(transform.position, direction);
                 projectile.gameObject.SetActive(true);
             }
             _shootCoroutine = StartCoroutine(nameof(DelayShoot));
         }
     }
-
+    private Vector3 GetTransformDirection(Vector3 origin, Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up:
+                {
+                    return origin += new Vector3(1.0f, 1.5f, 0.0f);
+                }
+            case Direction.Down:
+                {
+                    return origin += new Vector3(1.0f, 1.5f, 0.0f);
+                }
+            case Direction.Left:
+                {
+                    return origin += new Vector3(-1.3f, 1.6f, 0.0f);
+                }
+            case Direction.Right:
+                {
+                    return origin += new Vector3(1.3f, 1.6f, 0.0f);
+                }
+        }
+        return Vector3.zero;
+    }
     private bool CheckSlope(Vector2 direction, float radius, float distance, LayerMask _layerMask)
     {
         RaycastHit2D hitInfo = Physics2D.CircleCast(transform.position, radius, direction, distance, _layerMask);
