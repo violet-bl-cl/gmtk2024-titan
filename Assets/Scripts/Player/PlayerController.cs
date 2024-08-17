@@ -55,10 +55,10 @@ public class PlayerController : InputHandler
     {
         _playerRb = GetComponent<Rigidbody2D>();
         _playerCapsule = GetComponent<CapsuleCollider2D>();
+        _playerHeight = _playerCapsule.size.y / 2;
         _fullStatus = transform.GetComponentInChildren<FullActionStatus>(true);
         _botStatus = transform.GetComponentInChildren<BottomActionStatus>(true);
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
-        _playerHeight = _playerCapsule.size.y / 2;
     }
 
     // Update is called once per frame
@@ -115,6 +115,170 @@ public class PlayerController : InputHandler
             _playerCapsule.isTrigger = true;
         }
 
+
+         
+        //Player Animation Status
+        if (isLeftPressed)
+        {
+            _direction = Direction.Left;
+            //Full Animation
+            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.34f, -1.0f));
+            //Top animation
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.34f, 0.6f));
+            //Bottom animation
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.35f, -0.3f));
+        }
+        else if (isRightPressed)
+        {
+            _direction = Direction.Right;
+            //Full Animation
+            SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.34f, -1.0f));
+            //Top animation
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.34f, 0.6f));
+            //Bottom animation
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.35f, -0.3f));
+        }
+        _fullStatus.gameObject.SetActive(isCrouch && isGround);
+        _botStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
+        _topStatus.gameObject.SetActive(!isCrouch || (isCrouch && !isGround));
+        //Player Movement, Jump, Crouch, Shoot
+        //if (isAnyDirectionKeyPressed && isGround && !isCrouch)
+        //{
+        //    if (isLookUp && !isShoot)
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
+        //    }
+        //    else if (isLookUp && isShoot)
+        //    {
+        //        Shoot(Direction.Up);
+        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
+        //    }
+        //    else if (!isLookUp && isShoot)
+        //    {
+        //        Shoot(_direction);
+        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
+        //    }
+        //    else
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopMoveRight;
+        //    }
+        //    _playerBotAction.Action = PlayerFSM.BotMoveLeft;
+        //}
+        //else if (isAnyDirectionKeyPressed && !isGround)
+        //{
+        //    if (isLookUp && !isShoot && !isCrouch)
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
+        //    }
+        //    else if (isLookUp && isShoot && !isCrouch)
+        //    {
+        //        Shoot(Direction.Up);
+        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
+        //    }
+        //    else if (!isLookUp && isShoot && !isCrouch)
+        //    {
+        //        Shoot(_direction);
+        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
+        //    }
+        //    else if (!isLookUp && isCrouch && isShoot)
+        //    {
+        //        Shoot(Direction.Down);
+        //        _playerTopAction.Action = PlayerFSM.TopShootDown;
+        //    }
+        //    else
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopJumpRight;
+        //    }
+        //    _playerBotAction.Action = PlayerFSM.BotJumpLeft;
+        //}
+        //else if (isAnyDirectionKeyNotPressed && !isGround)
+        //{
+        //    if (isCrouch && !isLookUp && !isShoot)
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopAimDown;
+        //    }
+        //    else if (isLookUp && !isCrouch && !isShoot)
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
+        //    }
+        //    else if (isLookUp && !isCrouch && isShoot)
+        //    {
+        //        Shoot(Direction.Up);
+        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
+        //    }
+        //    else if (!isLookUp && isCrouch && isShoot)
+        //    {
+        //        Shoot(Direction.Down);
+        //        _playerTopAction.Action = PlayerFSM.TopShootDown;
+        //    }
+        //    else
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopIdle;
+        //    }
+        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
+        //}
+        //else if (isAnyDirectionKeyNotPressed && !isGround)
+        //{
+//
+        //    _playerTopAction.Action = isCrouch ? PlayerFSM.TopAimDown : PlayerFSM.TopIdle;
+        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
+        //}
+        //else if (isAnyDirectionKeyPressed && isCrouch && isGround)
+        //{
+        //    if (!isLookUp && isShoot)
+        //    {
+        //        if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
+        //        Shoot(_direction);
+        //        _playerFullAction.Action = PlayerFSM.FullCrouchShoot;
+        //    }
+        //    else
+        //    {
+        //        _playerFullAction.Action = PlayerFSM.FullCrouchMove;
+        //    }
+        //}
+        //else if (isCrouch && isGround)
+        //{
+        //    //calltime occurs
+        //    if (!isLookUp && isShoot)
+        //    {
+        //        if (_inputCoroutine == null) _inputCoroutine = StartCoroutine(nameof(DelayInput));
+        //        Shoot(_direction);
+        //        _playerFullAction.Action = PlayerFSM.FullCrouchShoot;
+        //    }
+        //    else
+        //    {
+        //        _playerFullAction.Action = PlayerFSM.FullCrouch;
+        //    }
+        //}
+        //else if (!isCrouch && !isGround)
+        //{
+        //    _playerTopAction.Action = (!isLookUp && isShoot) ? PlayerFSM.TopShootRight : PlayerFSM.TopIdle;
+        //    _playerBotAction.Action = PlayerFSM.BotJumpIdle;
+        //}
+        //else
+        //{
+        //    if (isLookUp && !isShoot)
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopAimUp;
+        //    }
+        //    else if (isLookUp && isShoot)
+        //    {
+        //        Shoot(Direction.Up);
+        //        _playerTopAction.Action = PlayerFSM.TopShootUp;
+        //    }
+        //    else if (!isLookUp && isShoot)
+        //    {
+        //        Shoot(_direction);
+        //        _playerTopAction.Action = PlayerFSM.TopShootRight;
+        //    }
+        //    else
+        //    {
+        //        _playerTopAction.Action = PlayerFSM.TopIdle;
+//
+        //    }
+        //    _playerBotAction.Action = PlayerFSM.BotIdle;
+        //}
+
     }
 
     private IEnumerator DelayJump()
@@ -142,7 +306,6 @@ public class PlayerController : InputHandler
     }
     private void Shoot(Direction direction)
     {
-        Debug.Log(direction.ToString());
         if (_shootCoroutine == null)
         {
             GameObject bullet = ObjectPool.Instance.GetObjectPool();
@@ -163,5 +326,15 @@ public class PlayerController : InputHandler
         }
         _slopePerpendicular = Vector2.zero;
         return false;
+    }
+    private void OnDrawGizmos()
+    {
+        DrawHelper.SetTransform(transform);
+        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius);
+        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius);
+        DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
+        DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
+        DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);
+        DrawHelper.DrawCapsule(_playerHeight, 0.5f);
     }
 }
