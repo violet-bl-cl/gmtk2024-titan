@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : InputHandler
 {
@@ -39,7 +40,7 @@ public class PlayerController : InputHandler
     private float _shootDelayTime = 0.05f;
     private CapsuleCollider2D _playerCapsule;
     private float _playerHeight;
-    private Rigidbody2D _playerRb;
+    private Rigidbody2D _playerRigidBody;
     private Coroutine _jumpCoroutine;
     private Coroutine _inputCoroutine;
     private Coroutine _shootCoroutine;
@@ -54,7 +55,7 @@ public class PlayerController : InputHandler
     // Start is called before the first frame update
     void Start()
     {
-        _playerRb = GetComponent<Rigidbody2D>();
+        _playerRigidBody = GetComponent<Rigidbody2D>();
         _playerCapsule = GetComponent<CapsuleCollider2D>();
         _playerHeight = _playerCapsule.size.y / 2;
         _fullStatus = transform.GetComponentInChildren<FullActionStatus>(true);
@@ -85,19 +86,19 @@ public class PlayerController : InputHandler
         if (isAnyDirectionKeyPressed && !isSlope && !_allowInput)
         {
             Vector2 movePosition = new Vector2(horizontal * _forceAmount * movementSpeed, 0.0f);
-            _playerRb.gravityScale = 2.0f;
-            _playerRb.velocity = new Vector2(movePosition.x * Time.fixedDeltaTime, _playerRb.velocity.y);
+            _playerRigidBody.gravityScale = 2.0f;
+            _playerRigidBody.velocity = new Vector2(movePosition.x * Time.fixedDeltaTime, _playerRigidBody.velocity.y);
         }
         else if (isAnyDirectionKeyPressed && isSlope && !_allowInput)
         {
             Vector2 slopeDirection = new Vector2(horizontal * _forceAmount * movementSpeed * -_slopePerpendicular.x, -_slopePerpendicular.y * _movementSpeed);
-            Vector2 movePosition = new Vector2(slopeDirection.x * Time.fixedDeltaTime, _playerRb.velocity.y);
-            _playerRb.gravityScale = 0.0f;
-            _playerRb.velocity = movePosition;
+            Vector2 movePosition = new Vector2(slopeDirection.x * Time.fixedDeltaTime, _playerRigidBody.velocity.y);
+            _playerRigidBody.gravityScale = 0.0f;
+            _playerRigidBody.velocity = movePosition;
         }
         else if (isAnyDirectionKeyNotPressed && isSlope)
         {
-            _playerRb.velocity = Vector2.zero;
+            _playerRigidBody.velocity = Vector2.zero;
         }
 
         if (!isCrouch && _allowInput && (!isLookUp || isLookUp))
@@ -111,8 +112,8 @@ public class PlayerController : InputHandler
         {
             _jumpCoroutine = StartCoroutine(nameof(DelayJump));
             Vector2 jumpAmount = Vector2.up * _jumpForce * _forceAmount * Time.fixedDeltaTime;
-            _playerRb.velocity = jumpAmount;
-            _playerRb.gravityScale = 2.0f;
+            _playerRigidBody.velocity = jumpAmount;
+            _playerRigidBody.gravityScale = 2.0f;
             _playerCapsule.isTrigger = true;
         }
 
@@ -314,7 +315,7 @@ public class PlayerController : InputHandler
             {
                 Projectile projectile = bullet.GetComponent<Projectile>();
                 projectile.BulletDirection = direction;
-                projectile.BulletActiveTime = 5.0f;
+                projectile.BulletActiveTime = 2.0f;
                 projectile.transform.position = GetTransformDirection(transform.position, direction);
                 projectile.gameObject.SetActive(true);
             }
