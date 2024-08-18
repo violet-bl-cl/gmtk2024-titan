@@ -47,7 +47,6 @@ public class Enemy : MonoBehaviour
             case EnemyAction.Attack:
                 {
                     enemyAnimator.SetBool("IsWalk", false);
-                    enemyAnimator.SetTrigger("IsAttack");
                     break;
                 }
             case EnemyAction.MoveToPlayer:

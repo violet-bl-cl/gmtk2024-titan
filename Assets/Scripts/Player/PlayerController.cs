@@ -52,6 +52,9 @@ public class PlayerController : InputHandler
     private BottomActionStatus _botStatus;
     private TopActionStatus _topStatus;
 
+    //Player health.
+    private PlayerHealth _playerHealth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +64,7 @@ public class PlayerController : InputHandler
         _fullStatus = transform.GetComponentInChildren<FullActionStatus>(true);
         _botStatus = transform.GetComponentInChildren<BottomActionStatus>(true);
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
+        _playerHealth = GetComponent<PlayerHealth>();   
     }
 
     // Update is called once per frame
@@ -71,6 +75,7 @@ public class PlayerController : InputHandler
 
     void FixedUpdate()
     {
+        if(_playerHealth.isDead) return;   
         float horizontal = Input.GetAxis("Horizontal");
         bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
         bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveRight);
