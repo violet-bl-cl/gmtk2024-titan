@@ -17,12 +17,13 @@ public class EnemyManager : MonoBehaviour
         Enemy[] allEnemies = GameObject.FindObjectsOfType<Enemy>();
         for(int i = 0; i < allEnemies.Length; i++){
             Enemy enemy = allEnemies[i];
-            if(enemy.GetComponent<EnemyZombie>() != null){
-                 Debug.Log(allEnemies[i].name + $"Enemey {i}");
-                _enemies.Add(enemy.GetComponent<EnemyZombie>());
+            if(enemy.GetComponent<EnemyMelee>() != null){
+                _enemies.Add(enemy.GetComponent<EnemyMelee>());
+            }
+            else if(enemy.GetComponent<EnemyShooter>() != null){
+                _enemies.Add(enemy.GetComponent<EnemyShooter>());
             }
         }
-         Debug.Log(allEnemies[0].name);
     }
     void Update()
     {
@@ -30,14 +31,5 @@ public class EnemyManager : MonoBehaviour
         {
             _enemies[i].UpdateAction(TargetObj, Time.deltaTime);
         }
-    }
-
-    void OnDrawGizmos()
-    {
-        //for(int i = 0; i < _enemies.Count; i++){
-        //DrawHelper.SetTransform(_enemies[i]);
-        //DrawHelper.DrawRaySphere(Vector2.up, 0, _shootRange);
-//
-        //}
     }
 }

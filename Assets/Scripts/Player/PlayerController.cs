@@ -52,6 +52,9 @@ public class PlayerController : InputHandler
     private BottomActionStatus _botStatus;
     private TopActionStatus _topStatus;
 
+    //Player health.
+    private PlayerHealth _playerHealth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +64,7 @@ public class PlayerController : InputHandler
         _fullStatus = transform.GetComponentInChildren<FullActionStatus>(true);
         _botStatus = transform.GetComponentInChildren<BottomActionStatus>(true);
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
+        _playerHealth = GetComponent<PlayerHealth>();   
     }
 
     // Update is called once per frame
@@ -71,6 +75,7 @@ public class PlayerController : InputHandler
 
     void FixedUpdate()
     {
+        if(_playerHealth.isDead) return;   
         float horizontal = Input.GetAxis("Horizontal");
         bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
         bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveRight);
@@ -362,8 +367,8 @@ public class PlayerController : InputHandler
     private void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius);
-        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius);
+        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius,Color.red);
+        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius,Color.red);
         DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);

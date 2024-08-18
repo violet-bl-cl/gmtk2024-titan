@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-public class EnemyZombie : Enemy
+public class EnemyMelee : Enemy
 {
     [SerializeField]
     private EnemyAction _enemyAction = EnemyAction.Idle;
@@ -15,6 +15,8 @@ public class EnemyZombie : Enemy
     private bool isPlayerDetected = false;
     [SerializeField]
     private LayerMask targetMask;
+    [SerializeField, Range(0.0f, 100.0f)]
+    private float playerDetection = 0.0f;
     void Awake()
     {
         enemyObj = transform;
@@ -32,28 +34,37 @@ public class EnemyZombie : Enemy
             other.transform.gameObject.SetActive(false);
         }
     }
-    public EnemyZombie(Transform currentObj) : base(currentObj)
+    public EnemyMelee(Transform currentObj) : base(currentObj)
     {
     }
 
     public override void UpdateAction(Transform targetObj, float deltaTime)
     {
+
         bool isDead = _enemyHealth < 0.0f;
         if (isDead)
         {
             _enemyAction = EnemyAction.Death;
         }
+        if (RaycastHelper.CheckCircleSide(transform.position, Vector2.up, playerDetection, 0.0f, targetMask) && !isPlayerDetected)
+        {
+            isPlayerDetected = true;
+        }
+        bool enemyStatus = !isDead && isPlayerDetected;
         float distance = (enemyObj.position - targetObj.position).magnitude;
-        float followDistance = 10.0f;
-        float attackDistance = 3.0f;
-        Debug.Log($"{distance} {attackDistance}");
+        float followDistance = 3.0f;
+        float attackDistance = 4.0f;
         switch (_enemyAction)
         {
             case EnemyAction.Idle:
                 {
-                    if (distance > followDistance && !isDead)
+                    if (distance > followDistance && enemyStatus)
                     {
                         _enemyAction = EnemyAction.MoveToPlayer;
+                    }
+                    else if (distance < attackDistance && enemyStatus)
+                    {
+                        _enemyAction = EnemyAction.Attack;
                     }
                     else
                     {
@@ -73,7 +84,7 @@ public class EnemyZombie : Enemy
                 }
             case EnemyAction.Hit:
                 {
-                    if (hitCoroutine == null && !isDead)
+                    if (hitCoroutine == null && enemyStatus)
                     {
                         hitCoroutine = StartCoroutine(HitDelay(0.1f));
                     }
@@ -81,7 +92,7 @@ public class EnemyZombie : Enemy
                 }
             case EnemyAction.Attack:
                 {
-                    if (attackCoroutine == null && !isDead)
+                    if (attackCoroutine == null && enemyStatus)
                     {
                         attackCoroutine = StartCoroutine(AttackDelay(1.0f));
                     }
@@ -89,11 +100,11 @@ public class EnemyZombie : Enemy
                 }
             case EnemyAction.MoveToPlayer:
                 {
-                    if (distance < attackDistance && !isDead)
+                    if (distance < attackDistance && enemyStatus)
                     {
                         _enemyAction = EnemyAction.Attack;
                     }
-                    else if (distance > followDistance && !isDead)
+                    else if (distance > followDistance && enemyStatus)
                     {
                         _enemyAction = EnemyAction.MoveToPlayer;
                     }
@@ -115,6 +126,9 @@ public class EnemyZombie : Enemy
         RaycastHit2D hitInfo = RaycastHelper.GetCircleHit(transform.position, Vector3.up, 4.0f, 0f, targetMask);
         if (hitInfo.collider != null)
         {
+            PlayerHealth playerStatus = hitInfo.collider.GetComponent<PlayerHealth>();
+            float damage = Random.Range(10.0f, 20.0f);
+            playerStatus.TakeDamage(damage);
             Debug.Log($"{hitInfo.collider.name}");
         }
         yield return new WaitForSeconds(delaySecond);
@@ -134,6 +148,7 @@ public class EnemyZombie : Enemy
     void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f);
+        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f,Color.red);
+        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection,Color.green);
     }
 }
