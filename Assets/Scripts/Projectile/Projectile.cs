@@ -1,5 +1,5 @@
 using UnityEngine;
-[RequireComponent(typeof(SpriteRenderer), typeof(BoxCollider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField, Range(0.0f, 100.0f)]
@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     // Start is called before the first frame update
     void Start(){
-        _spriteRenderer = GetComponent<SpriteRenderer>(); 
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
     }
     void OnEnable()
     {
@@ -30,21 +30,25 @@ public class Projectile : MonoBehaviour
             case Direction.Left:
                 {
                     transform.position += -transform.right * Time.deltaTime * ProjectileSpeed;
+                    _spriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
                     break;
                 }
             case Direction.Right:
                 {
                     transform.position += transform.right * Time.deltaTime * ProjectileSpeed;
+                    _spriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
                     break;
                 }
             case Direction.Up:
                 {
                     transform.position += transform.up * Time.deltaTime * ProjectileSpeed;
+                      _spriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
                     break;
                 }
             case Direction.Down:
                 {
                     transform.position += -transform.up * Time.deltaTime * ProjectileSpeed;
+                     _spriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
                     break;
                 }
             default:

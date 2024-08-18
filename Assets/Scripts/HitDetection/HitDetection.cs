@@ -1,23 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HitDetection : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform != null)
+        if (other.CompareTag("Bullet"))
         {
             other.transform.gameObject.SetActive(false);
             print($"{other.transform.name}");
