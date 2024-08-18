@@ -1,7 +1,9 @@
 public enum EnemyAction{
-    Shoot,
-    Walk,
-    Jump,
+    Attack,
+    Stroll,
+    MoveToPlayer,
+    Flee,
     Idle,
-    
+    Death,
+    Hit,
 }
