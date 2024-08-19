@@ -48,8 +48,11 @@ public class PlayerController : InputHandler
     private Direction _direction;
 
     //Player finite state machine.
+    [SerializeField]
     private FullActionStatus _fullStatus;
+    [SerializeField]
     private BottomActionStatus _botStatus;
+    [SerializeField]
     private TopActionStatus _topStatus;
 
     //Player health.
