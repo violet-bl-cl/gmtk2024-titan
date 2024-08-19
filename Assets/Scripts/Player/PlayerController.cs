@@ -367,8 +367,8 @@ public class PlayerController : InputHandler
     private void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius);
-        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius);
+        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius,Color.red);
+        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius,Color.red);
         DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);

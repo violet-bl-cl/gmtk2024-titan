@@ -165,7 +165,7 @@ public class EnemyShooter : Enemy
     void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f);
-        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection);
+        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f,Color.red);
+        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection,Color.green);
     }
 }
