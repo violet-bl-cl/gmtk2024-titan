@@ -5,7 +5,7 @@ public class HitInfo
     public float Damage;
     public HitInfo(int id, string targetName, float damage)
     {
-        this.Id = id; ;
+        this.Id = id; 
         this.TargetName = targetName;
         this.Damage = damage;
     }

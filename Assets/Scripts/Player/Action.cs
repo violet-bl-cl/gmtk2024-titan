@@ -18,5 +18,6 @@ public enum Action
     FullCrouchMoveRight,
     FullCrouchMoveStart,
     FullCrouchShoot,
-    
+    FullDeath,
+    FullSpawn,
 }

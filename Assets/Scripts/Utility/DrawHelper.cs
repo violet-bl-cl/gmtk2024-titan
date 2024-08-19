@@ -24,9 +24,9 @@ public static class DrawHelper {
         Gizmos.DrawLine(start, end);
         Gizmos.DrawWireCube(end, boxSize);
     }
-    public static void DrawRaySphere(Vector2 direction, float distance, float sphereRadius)
+    public static void DrawRaySphere(Vector2 direction, float distance, float sphereRadius, Color color)
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = color;
         Vector2 start = (Vector2)objectTransform.position;
         Vector2 end = start + direction * distance;
         Gizmos.DrawLine(start, end);
