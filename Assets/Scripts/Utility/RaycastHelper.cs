@@ -2,6 +2,10 @@ using UnityEngine;
 
 public static class RaycastHelper
 {
+    public static RaycastHit2D GetCircleHit(Vector3 origin,Vector2 direction, float raidus, float distance, LayerMask layerMask)
+    {
+        return Physics2D.CircleCast(origin, raidus, direction, distance,layerMask);
+    }
     public static bool CheckCircleSide(Vector3 origin,Vector2 direction, float raidus, float distance, LayerMask layerMask)
     {
         RaycastHit2D hitInfo = Physics2D.CircleCast(origin, raidus, direction, distance,layerMask);

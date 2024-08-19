@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : InputHandler
 {
@@ -39,7 +40,7 @@ public class PlayerController : InputHandler
     private float _shootDelayTime = 0.05f;
     private CapsuleCollider2D _playerCapsule;
     private float _playerHeight;
-    private Rigidbody2D _playerRb;
+    private Rigidbody2D _playerRigidBody;
     private Coroutine _jumpCoroutine;
     private Coroutine _inputCoroutine;
     private Coroutine _shootCoroutine;
@@ -51,15 +52,19 @@ public class PlayerController : InputHandler
     private BottomActionStatus _botStatus;
     private TopActionStatus _topStatus;
 
+    //Player health.
+    private PlayerHealth _playerHealth;
+
     // Start is called before the first frame update
     void Start()
     {
-        _playerRb = GetComponent<Rigidbody2D>();
+        _playerRigidBody = GetComponent<Rigidbody2D>();
         _playerCapsule = GetComponent<CapsuleCollider2D>();
         _playerHeight = _playerCapsule.size.y / 2;
         _fullStatus = transform.GetComponentInChildren<FullActionStatus>(true);
         _botStatus = transform.GetComponentInChildren<BottomActionStatus>(true);
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
+        _playerHealth = GetComponent<PlayerHealth>();   
     }
 
     // Update is called once per frame
@@ -70,6 +75,7 @@ public class PlayerController : InputHandler
 
     void FixedUpdate()
     {
+        if(_playerHealth.isDead) return;   
         float horizontal = Input.GetAxis("Horizontal");
         bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
         bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveRight);
@@ -85,19 +91,19 @@ public class PlayerController : InputHandler
         if (isAnyDirectionKeyPressed && !isSlope && !_allowInput)
         {
             Vector2 movePosition = new Vector2(horizontal * _forceAmount * movementSpeed, 0.0f);
-            _playerRb.gravityScale = 2.0f;
-            _playerRb.velocity = new Vector2(movePosition.x * Time.fixedDeltaTime, _playerRb.velocity.y);
+            _playerRigidBody.gravityScale = 2.0f;
+            _playerRigidBody.velocity = new Vector2(movePosition.x * Time.fixedDeltaTime, _playerRigidBody.velocity.y);
         }
         else if (isAnyDirectionKeyPressed && isSlope && !_allowInput)
         {
             Vector2 slopeDirection = new Vector2(horizontal * _forceAmount * movementSpeed * -_slopePerpendicular.x, -_slopePerpendicular.y * _movementSpeed);
-            Vector2 movePosition = new Vector2(slopeDirection.x * Time.fixedDeltaTime, _playerRb.velocity.y);
-            _playerRb.gravityScale = 0.0f;
-            _playerRb.velocity = movePosition;
+            Vector2 movePosition = new Vector2(slopeDirection.x * Time.fixedDeltaTime, _playerRigidBody.velocity.y);
+            _playerRigidBody.gravityScale = 0.0f;
+            _playerRigidBody.velocity = movePosition;
         }
         else if (isAnyDirectionKeyNotPressed && isSlope)
         {
-            _playerRb.velocity = Vector2.zero;
+            _playerRigidBody.velocity = Vector2.zero;
         }
 
         if (!isCrouch && _allowInput && (!isLookUp || isLookUp))
@@ -111,8 +117,8 @@ public class PlayerController : InputHandler
         {
             _jumpCoroutine = StartCoroutine(nameof(DelayJump));
             Vector2 jumpAmount = Vector2.up * _jumpForce * _forceAmount * Time.fixedDeltaTime;
-            _playerRb.velocity = jumpAmount;
-            _playerRb.gravityScale = 2.0f;
+            _playerRigidBody.velocity = jumpAmount;
+            _playerRigidBody.gravityScale = 2.0f;
             _playerCapsule.isTrigger = true;
         }
 
@@ -314,7 +320,7 @@ public class PlayerController : InputHandler
             {
                 Projectile projectile = bullet.GetComponent<Projectile>();
                 projectile.BulletDirection = direction;
-                projectile.BulletActiveTime = 5.0f;
+                projectile.BulletActiveTime = 2.0f;
                 projectile.transform.position = GetTransformDirection(transform.position, direction);
                 projectile.gameObject.SetActive(true);
             }
@@ -361,8 +367,8 @@ public class PlayerController : InputHandler
     private void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius);
-        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius);
+        DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius,Color.red);
+        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius,Color.red);
         DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);
