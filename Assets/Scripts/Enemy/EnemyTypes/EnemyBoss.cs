@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 public class EnemyBoss : Enemy
 {
     [SerializeField]
@@ -20,6 +21,7 @@ public class EnemyBoss : Enemy
     private LayerMask targetMask;
     [SerializeField, Range(0.0f, 100.0f)]
     private float playerDetection = 0.0f;
+    public GameObject Credits;
     void Awake()
     {
         enemyObj = transform;
@@ -27,6 +29,7 @@ public class EnemyBoss : Enemy
         enemyAnimator = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         enemyRigidBody = GetComponent<Rigidbody2D>();
+        Credits.SetActive(false);
     }
     public EnemyBoss(Transform currentObj) : base(currentObj)
     {
@@ -38,6 +41,7 @@ public class EnemyBoss : Enemy
         bool isDead = _enemyHealth < 0.0f;
         if (isDead)
         {
+            Credits.SetActive(true);
             _enemyAction = EnemyAction.Death;
         }
         if (RaycastHelper.CheckCircleSide(transform.position, Vector2.up, playerDetection, 0.0f, targetMask) && !isPlayerDetected)

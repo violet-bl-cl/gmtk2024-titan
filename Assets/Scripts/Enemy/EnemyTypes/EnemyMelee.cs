@@ -108,10 +108,10 @@ public class EnemyMelee : Enemy
                         if (blinkCoroutine == null)
                         {
                             float randomTime = Random.Range(2f, 3f);
-                            float randomX = Random.Range(-7.0f, 7.0f);
-                            Vector2 origin = transform.localPosition;
-                            origin.x = randomX + targetObj.transform.localPosition.x;
-                            transform.localPosition = origin;
+                           // float randomX = Random.Range(-7.0f, 7.0f);
+                           // Vector2 origin = transform.localPosition;
+                           // origin.x = randomX + targetObj.transform.localPosition.x;
+                           // transform.localPosition = origin;
                             blinkCoroutine = StartCoroutine(BlinkDelay(randomTime));
                         }
                     }

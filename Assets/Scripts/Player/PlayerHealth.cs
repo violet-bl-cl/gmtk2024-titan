@@ -54,6 +54,12 @@ public class PlayerHealth : MonoBehaviour
             _botActionStatus.gameObject.SetActive(false);
             _fullActionStatus.gameObject.SetActive(true);
             _fullActionStatus.PlayerAction = Action.FullDeath;
+            //play death screen animation here
+            UISpriteAnimation sprite = FindObjectOfType<UISpriteAnimation>(true);
+            if (!sprite.gameObject.activeSelf && sprite != null)
+            {
+                sprite.gameObject.SetActive(true);
+            }
             isDead = true;
             return;
         }
