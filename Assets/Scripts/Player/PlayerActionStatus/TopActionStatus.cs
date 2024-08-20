@@ -55,31 +55,7 @@ public class TopActionStatus : MonoBehaviour
                 {
                     _playerAnimator.SetBool("IsJump", true);
                     _playerAnimator.SetBool("IsWalk", false);
-                    _playerAnimator.SetBool("IsDown", false);
-                    _playerAnimator.SetBool("IsUp", false);
-                    break;
-                }
-            case Action.TopShootRight:
-                {
-                    _playerAnimator.SetTrigger("ShootRight");
-                    break;
-                }
-            case Action.TopShootDown:
-                {
-                    _playerAnimator.SetTrigger("ShootDown");
-                    break;
-                }
-            case Action.TopShootUp:
-                {
-                    _playerAnimator.SetTrigger("ShootUp");
-                    break;
-                }
-            case Action.TopHit:{
-                _playerAnimator.SetTrigger("IsHit");
-                break;
-            }
-            default:
-                {
+                    _playerAnimator.SetBool("IsJump", false);
                     break;
                 }
         }
