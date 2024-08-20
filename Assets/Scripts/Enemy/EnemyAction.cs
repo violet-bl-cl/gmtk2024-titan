@@ -6,4 +6,5 @@ public enum EnemyAction{
     Idle,
     Death,
     Hit,
+    Blink,
 }

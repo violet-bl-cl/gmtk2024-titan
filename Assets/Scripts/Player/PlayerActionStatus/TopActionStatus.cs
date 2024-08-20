@@ -74,6 +74,10 @@ public class TopActionStatus : MonoBehaviour
                     _playerAnimator.SetTrigger("ShootUp");
                     break;
                 }
+            case Action.TopHit:{
+                _playerAnimator.SetTrigger("IsHit");
+                break;
+            }
             default:
                 {
                     break;

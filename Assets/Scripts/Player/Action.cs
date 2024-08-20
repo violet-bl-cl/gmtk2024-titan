@@ -8,7 +8,8 @@ public enum Action
     TopShootUp,
     TopShootRight,
     TopShootDown,
-
+    TopHit,
+    
     BotMoveRight,
     BotIdle,
     BotJumpIdle,

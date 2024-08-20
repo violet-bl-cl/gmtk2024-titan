@@ -7,20 +7,49 @@ public class PlayerHealth : MonoBehaviour
     private FullActionStatus _fullActionStatus;
     private TopActionStatus _topActionStatus;
     private BottomActionStatus _botActionStatus;
+    private PlayerController _playerController;
+
     public bool isDead;
     void Awake()
     {
+        _playerController = GetComponentInChildren<PlayerController>();
         _fullActionStatus = GetComponentInChildren<FullActionStatus>();
         _botActionStatus = GetComponentInChildren<BottomActionStatus>();
         _topActionStatus = GetComponentInChildren<TopActionStatus>();
 
     }
-    void Update()
+    void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.GetComponent<Projectile>() != null)
+        {
+            Projectile projectile = other.GetComponent<Projectile>();
+            CheckPlayerDeath();
+            float damageAmount = Random.Range(15.0f, 20.0f);
+            if (other.CompareTag("Bullet") && projectile.targetName == "Player")
+            {
+                if (_playerController.HitCoroutine == null)
+                {
+                    CurrentHealth -= damageAmount;
+                    StartCoroutine(_playerController.DelayHit(0.5f));
+                }
+                other.transform.gameObject.SetActive(false);
+            }
+        }
     }
     public void TakeDamage(float damageAmount)
-    {   
-        if(CurrentHealth < 0){
+    {
+        CheckPlayerDeath();
+        if (_playerController.HitCoroutine == null)
+        {
+            CurrentHealth -= damageAmount;
+            StartCoroutine(_playerController.DelayHit(0.5f));
+        }
+    }
+
+    public void CheckPlayerDeath()
+    {
+        if (CurrentHealth < 0)
+        {
             _topActionStatus.gameObject.SetActive(false);
             _botActionStatus.gameObject.SetActive(false);
             _fullActionStatus.gameObject.SetActive(true);
@@ -28,6 +57,5 @@ public class PlayerHealth : MonoBehaviour
             isDead = true;
             return;
         }
-        CurrentHealth -= damageAmount;
     }
 }

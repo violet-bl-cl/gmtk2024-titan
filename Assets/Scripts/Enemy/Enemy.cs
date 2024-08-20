@@ -40,6 +40,9 @@ public class Enemy : MonoBehaviour
         }
         switch (enemyAction)
         {
+            case EnemyAction.Blink:{
+                break;
+            }
             case EnemyAction.Flee:
                 {
                     break;

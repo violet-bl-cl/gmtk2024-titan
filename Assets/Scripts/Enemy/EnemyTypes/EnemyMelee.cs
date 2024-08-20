@@ -12,6 +12,7 @@ public class EnemyMelee : Enemy
     private float _shootRange = 10.0f;
     private Coroutine attackCoroutine;
     private Coroutine hitCoroutine;
+    private Coroutine blinkCoroutine;
     private bool isPlayerDetected = false;
     [SerializeField]
     private LayerMask targetMask;
@@ -25,15 +26,7 @@ public class EnemyMelee : Enemy
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         enemyRigidBody = GetComponent<Rigidbody2D>();
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            _enemyAction = EnemyAction.Hit;
-            _enemyHealth -= 20.0f;
-            other.transform.gameObject.SetActive(false);
-        }
-    }
+   
     public EnemyMelee(Transform currentObj) : base(currentObj)
     {
     }
@@ -77,6 +70,10 @@ public class EnemyMelee : Enemy
 
                     break;
                 }
+            case EnemyAction.Blink:
+                {
+                    break;
+                }
             case EnemyAction.Stroll:
                 {
 
@@ -94,7 +91,8 @@ public class EnemyMelee : Enemy
                 {
                     if (attackCoroutine == null && enemyStatus)
                     {
-                        attackCoroutine = StartCoroutine(AttackDelay(1.0f));
+                        float randomTime = Random.Range(0.6f, 1.3f);
+                        attackCoroutine = StartCoroutine(AttackDelay(randomTime));
                     }
                     break;
                 }
@@ -106,7 +104,16 @@ public class EnemyMelee : Enemy
                     }
                     else if (distance > followDistance && enemyStatus)
                     {
-                        _enemyAction = EnemyAction.MoveToPlayer;
+                        //remove physics here
+                        if (blinkCoroutine == null)
+                        {
+                            float randomTime = Random.Range(2f, 3f);
+                            float randomX = Random.Range(-7.0f, 7.0f);
+                            Vector2 origin = transform.localPosition;
+                            origin.x = randomX + targetObj.transform.localPosition.x;
+                            transform.localPosition = origin;
+                            blinkCoroutine = StartCoroutine(BlinkDelay(randomTime));
+                        }
                     }
                     else
                     {
@@ -118,7 +125,14 @@ public class EnemyMelee : Enemy
         //Animation State!
         ExecuteAction(targetObj, _enemyAction, deltaTime);
     }
-
+    private IEnumerator BlinkDelay(float delaySecond)
+    {
+        _enemyAction = EnemyAction.MoveToPlayer;
+        yield return new WaitForSeconds(delaySecond);
+        StopCoroutine(blinkCoroutine);
+        blinkCoroutine = null;
+        _enemyAction = EnemyAction.Idle;
+    }
     private IEnumerator AttackDelay(float delaySecond)
     {
         enemyAnimator.SetBool("IsWalk", false);
@@ -129,7 +143,6 @@ public class EnemyMelee : Enemy
             PlayerHealth playerStatus = hitInfo.collider.GetComponent<PlayerHealth>();
             float damage = Random.Range(10.0f, 20.0f);
             playerStatus.TakeDamage(damage);
-            Debug.Log($"{hitInfo.collider.name}");
         }
         yield return new WaitForSeconds(delaySecond);
         StopCoroutine(attackCoroutine);
@@ -145,10 +158,23 @@ public class EnemyMelee : Enemy
         hitCoroutine = null;
         _enemyAction = EnemyAction.MoveToPlayer;
     }
+     void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<Projectile>() != null)
+        {
+            Projectile projectile = other.GetComponent<Projectile>();
+            if (other.CompareTag("Bullet") && projectile.targetName == "Enemy")
+            {
+                _enemyAction = EnemyAction.Hit;
+                _enemyHealth -= 20.0f;
+                other.transform.gameObject.SetActive(false);
+            }
+        }
+    }
     void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f,Color.red);
-        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection,Color.green);
+        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f, Color.red);
+        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection, Color.green);
     }
 }

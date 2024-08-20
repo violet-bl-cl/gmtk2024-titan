@@ -8,15 +8,19 @@ public class Projectile : MonoBehaviour
     [Range(0.0f, 100.0f)]
     public float ProjectileSpeed;
     public float BulletActiveTime;
+    public string targetName;
     public Vector2 diffDistance;
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer SpriteRenderer;
     // Start is called before the first frame update
-    void Start(){
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
+    void Awake(){
+         SpriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
+        targetName = "none"; 
     }
+   
     void OnEnable()
     {
         Invoke(nameof(DeactivateCurrentObject), BulletActiveTime);
+        
     }
     void OnDisable()
     {
@@ -30,25 +34,25 @@ public class Projectile : MonoBehaviour
             case Direction.Left:
                 {
                     transform.position += -transform.right * Time.deltaTime * ProjectileSpeed;
-                    _spriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
+                    SpriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
                     break;
                 }
             case Direction.Right:
                 {
                     transform.position += transform.right * Time.deltaTime * ProjectileSpeed;
-                    _spriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
+                    SpriteRenderer.transform.rotation = Quaternion.AngleAxis(0.0f, Vector3.forward);
                     break;
                 }
             case Direction.Up:
                 {
                     transform.position += transform.up * Time.deltaTime * ProjectileSpeed;
-                      _spriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+                      SpriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
                     break;
                 }
             case Direction.Down:
                 {
                     transform.position += -transform.up * Time.deltaTime * ProjectileSpeed;
-                     _spriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
+                     SpriteRenderer.transform.rotation = Quaternion.AngleAxis(90.0f, Vector3.forward);
                     break;
                 }
             default:
