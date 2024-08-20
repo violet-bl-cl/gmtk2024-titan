@@ -17,30 +17,43 @@ public class TopActionStatus : MonoBehaviour
     {
         switch (PlayerAction)
         {
-            case Action.BotJumpIdle:
+            case Action.TopIdle:
                 {
-                    _playerAnimator.SetBool("IsJump", true);
+
                     _playerAnimator.SetBool("IsWalk", false);
-                    _playerAnimator.SetBool("IsIdle", false);
+                    _playerAnimator.SetBool("IsJump", false);
+                    _playerAnimator.SetBool("IsDown", false);
+                    _playerAnimator.SetBool("IsUp", false);
                     break;
                 }
-            case Action.BotJumpRight:
+            case Action.TopAimUp:
                 {
-                    _playerAnimator.SetBool("IsJump", true);
-                    _playerAnimator.SetBool("IsWalk", true);
-                    _playerAnimator.SetBool("IsIdle", false);
-                    break;
-                }
-            case Action.BotMoveRight:
-                {
-                    _playerAnimator.SetBool("IsWalk", true);
-                    _playerAnimator.SetBool("IsIdle", false);
+                    _playerAnimator.SetBool("IsUp", true);
+                    _playerAnimator.SetBool("IsDown", false);
+                    _playerAnimator.SetBool("IsWalk", false);
                     _playerAnimator.SetBool("IsJump", false);
                     break;
                 }
-            case Action.BotIdle:
+            case Action.TopAimDown:
                 {
-                    _playerAnimator.SetBool("IsIdle", true);
+
+                    _playerAnimator.SetBool("IsDown", true);
+                    _playerAnimator.SetBool("IsWalk", false);
+                    _playerAnimator.SetBool("IsJump", false);
+                    _playerAnimator.SetBool("IsUp", false);
+                    break;
+                }
+            case Action.TopMoveRight:
+                {
+                    _playerAnimator.SetBool("IsWalk", true);
+                    _playerAnimator.SetBool("IsJump", false);
+                    _playerAnimator.SetBool("IsDown", false);
+                    _playerAnimator.SetBool("IsUp", false);
+                    break;
+                }
+            case Action.TopJumpRight:
+                {
+                    _playerAnimator.SetBool("IsJump", true);
                     _playerAnimator.SetBool("IsWalk", false);
                     _playerAnimator.SetBool("IsJump", false);
                     break;

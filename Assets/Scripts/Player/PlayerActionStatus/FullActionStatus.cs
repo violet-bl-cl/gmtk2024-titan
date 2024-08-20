@@ -34,6 +34,13 @@ public class FullActionStatus : MonoBehaviour
                     _playerAnimator.SetTrigger("ShootRight");
                     break;
                 }
+                case Action.FullDeath:{
+                    Vector2 origin = (Vector2)transform.localPosition;
+                    Vector2 newPosition = new Vector2(0,0.73f);
+                    origin.y = newPosition.y;
+                    transform.localPosition =  origin;
+                    break;
+                }
         }
 
     }

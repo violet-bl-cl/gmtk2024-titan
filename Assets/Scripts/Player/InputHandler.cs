@@ -11,4 +11,5 @@ public class InputHandler : MonoBehaviour {
     public KeyCode MoveDown = KeyCode.S;
     public KeyCode MoveLeft = KeyCode.A;
     public KeyCode MoveRight = KeyCode.D;
+    public KeyCode ShowInstructionKey = KeyCode.Tab;
 }

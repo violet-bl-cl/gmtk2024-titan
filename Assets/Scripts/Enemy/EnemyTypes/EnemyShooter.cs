@@ -3,6 +3,8 @@ using System.Collections;
 public class EnemyShooter : Enemy
 {
     [SerializeField]
+    private Color _bulletColor;
+    [SerializeField]
     private EnemyAction _enemyAction = EnemyAction.Idle;
     [SerializeField]
     private float _enemyHealth = 100.0f;
@@ -10,6 +12,8 @@ public class EnemyShooter : Enemy
     private float _movementSpeed = 10.0f;
     [SerializeField]
     private float _shootRange = 10.0f;
+    [SerializeField]
+    Vector3 shootPosition;
     private Coroutine attackCoroutine;
     private Coroutine hitCoroutine;
     private bool isPlayerDetected = false;
@@ -25,15 +29,7 @@ public class EnemyShooter : Enemy
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         enemyRigidBody = GetComponent<Rigidbody2D>();
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            _enemyAction = EnemyAction.Hit;
-            _enemyHealth -= 20.0f;
-            other.transform.gameObject.SetActive(false);
-        }
-    }
+  
     public EnemyShooter(Transform currentObj) : base(currentObj)
     {
     }
@@ -54,7 +50,7 @@ public class EnemyShooter : Enemy
         float differenceX = enemyObj.position.x - targetObj.position.x;
         float distance = (enemyObj.position - targetObj.position).magnitude;
         float followDistance = 3.0f;
-        float attackDistance = 4.0f;
+        float attackDistance = 10.0f;
         switch (_enemyAction)
         {
             case EnemyAction.Idle:
@@ -63,7 +59,7 @@ public class EnemyShooter : Enemy
                     {
                         _enemyAction = EnemyAction.MoveToPlayer;
                     }
-                    else if (distance < attackDistance && enemyStatus)
+                    else if (distance < _shootRange && enemyStatus)
                     {
                         _enemyAction = EnemyAction.Attack;
                     }
@@ -87,7 +83,7 @@ public class EnemyShooter : Enemy
                 {
                     if (hitCoroutine == null && enemyStatus)
                     {
-                        hitCoroutine = StartCoroutine(HitDelay(0.1f));
+                        hitCoroutine = StartCoroutine(HitDelay(0.5f));
                     }
                     break;
                 }
@@ -95,15 +91,14 @@ public class EnemyShooter : Enemy
                 {
                     if (attackCoroutine == null && enemyStatus)
                     {
-                        Debug.Log("Attacl");
-                        float randomShootTime = Random.Range(1.5f, 2.5f);
+                        float randomShootTime = Random.Range(0.3f, 2.5f);
                         attackCoroutine = StartCoroutine(AttackDelay(randomShootTime, differenceX > 0));
                     }
                     break;
                 }
             case EnemyAction.MoveToPlayer:
                 {
-                    if (distance < attackDistance && enemyStatus)
+                    if (distance < _shootRange && enemyStatus)
                     {
                         _enemyAction = EnemyAction.Attack;
                     }
@@ -129,22 +124,24 @@ public class EnemyShooter : Enemy
         Vector2 projectilePosition = Vector2.zero;
         if (flip) //right
         {
-            projectilePosition = (Vector2)transform.position + new Vector2(-4, 1);
+            projectilePosition = (Vector2)transform.position + new Vector2(-shootPosition.x, shootPosition.y);
             direction = Direction.Left;
         }
         else
         {
-            projectilePosition = (Vector2)transform.position + new Vector2(4, 1);
+            projectilePosition = (Vector2)transform.position + new Vector2(shootPosition.x, shootPosition.y);
             direction = Direction.Right;
         }
         GameObject bullet = ObjectPool.Instance.GetObjectPool();
         if (bullet != null)
         {
-             enemyAnimator.SetBool("IsWalk", false);
+            enemyAnimator.SetBool("IsWalk", false);
             enemyAnimator.SetTrigger("IsAttack");
             Projectile projectile = bullet.GetComponent<Projectile>();
+            projectile.targetName = "Player";
             projectile.BulletDirection = direction;
             projectile.BulletActiveTime = 2.0f;
+            projectile.SpriteRenderer.color = _bulletColor;
             projectile.transform.position = projectilePosition;
             projectile.gameObject.SetActive(true);
         }
@@ -162,10 +159,25 @@ public class EnemyShooter : Enemy
         hitCoroutine = null;
         _enemyAction = EnemyAction.MoveToPlayer;
     }
+      void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<Projectile>() != null)
+        {
+            Projectile projectile = other.GetComponent<Projectile>();
+            if (other.CompareTag("Bullet") && projectile.targetName == "Enemy")
+            {
+                _enemyAction = EnemyAction.Hit;
+                _enemyHealth -= 20.0f;
+                other.transform.gameObject.SetActive(false);
+            }
+        }
+    }
     void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, 0, 4.0f,Color.red);
-        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection,Color.green);
+        DrawHelper.DrawRaySphere(Vector2.up, 0, _shootRange, Color.red);
+        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection, Color.green);
+        DrawHelper.DrawRaySphere(Vector2.right, shootPosition.x, 0.5f, Color.green);
+        //        DrawHelper.DrawCapsule(capsuleCollider.size.y, capsuleCollider.size.x);
     }
 }

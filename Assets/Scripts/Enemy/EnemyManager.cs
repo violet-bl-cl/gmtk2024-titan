@@ -23,6 +23,13 @@ public class EnemyManager : MonoBehaviour
             else if(enemy.GetComponent<EnemyShooter>() != null){
                 _enemies.Add(enemy.GetComponent<EnemyShooter>());
             }
+            else if(enemy.GetComponent<EnemyBoss>() != null){
+                _enemies.Add(enemy.GetComponent<EnemyBoss>());
+            }
+            else if(enemy.GetComponent<EnemyShooterStationary>() != null)
+            {
+                _enemies.Add(enemy.GetComponent<EnemyShooterStationary>());
+            }
         }
     }
     void Update()
