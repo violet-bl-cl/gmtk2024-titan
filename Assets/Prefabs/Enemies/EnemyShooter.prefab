@@ -190,7 +190,7 @@ MonoBehaviour:
   _enemyAction: 0
   _enemyHealth: 100
   _movementSpeed: 0
-  _shootRange: 15
+  _shootRange: 6
   shootPosition: {x: 1.6, y: 0.7, z: 0}
   targetMask:
     serializedVersion: 2

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 public class EnemyBoss : Enemy
 {
     [SerializeField]
@@ -38,6 +39,7 @@ public class EnemyBoss : Enemy
         bool isDead = _enemyHealth < 0.0f;
         if (isDead)
         {
+            SceneManager.LoadScene(1);
             _enemyAction = EnemyAction.Death;
         }
         if (RaycastHelper.CheckCircleSide(transform.position, Vector2.up, playerDetection, 0.0f, targetMask) && !isPlayerDetected)

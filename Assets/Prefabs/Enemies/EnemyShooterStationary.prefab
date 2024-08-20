@@ -126,7 +126,7 @@ MonoBehaviour:
   _attackSpeed: 0
   _bulletColor: {r: 0.07338022, g: 0.7625544, b: 0.9150943, a: 1}
   _enemyAction: 4
-  _enemyHealth: 0
+  _enemyHealth: 100
   _movementSpeed: 0
   _shootRange: 10
   shootPosition: {x: 1.6, y: 0.7, z: 0}

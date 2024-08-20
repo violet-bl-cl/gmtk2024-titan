@@ -55,12 +55,14 @@ public class PlayerController : InputHandler
     private BottomActionStatus _botStatus;
     [SerializeField]
     private TopActionStatus _topStatus;
-
     //Player health.
     private PlayerHealth _playerHealth;
     // switch scale 
     [SerializeField]
-    private bool isScale = false;
+    private bool _isScale = false;
+    private bool _isInstruction = false;
+    public AudioClip BossMusic;
+    public GameObject InstructionPage;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,23 +74,31 @@ public class PlayerController : InputHandler
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
         _playerHealth = GetComponent<PlayerHealth>();
     }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        if (Input.GetKeyDown(ShowInstructionKey))
+        {
+            _isInstruction = !_isInstruction;
+            InstructionPage.SetActive(_isInstruction);
+        }
+
         if (Input.GetKeyDown(SwitchScaleKey))
         {
-            isScale = !isScale;
+            _isScale = !_isScale;
         }
-    }
-    void FixedUpdate()
-    {
         if (_playerHealth.isDead) return;
-        Vector2 boxSize = (isScale) ? new Vector2(0.2f, 0.55f) : _sideBoxSize;
-        Vector3 spriteScaleSize = (isScale) ? new Vector3(0.5f, 0.5f, 0.5f) : new Vector3(1.0f, 1.0f, 1.0f);
+        Vector2 boxSize = (_isScale) ? new Vector2(0.2f, 0.55f) : _sideBoxSize;
+        Vector3 spriteScaleSize = (_isScale) ? new Vector3(0.5f, 0.5f, 0.5f) : new Vector3(1.0f, 1.0f, 1.0f);
         float horizontal = Input.GetAxis("Horizontal");
         bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, boxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
         bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, boxSize, _groundLayerMask) && Input.GetKey(MoveRight);
-        bool isGround = RaycastHelper.CheckCircleSide(transform.position, Vector2.down, _bottomGroundRadius,(isScale) ? _bottomGroundDistance /2 : _bottomGroundDistance, _groundLayerMask);
-        bool isSlope = CheckSlope(-Vector2.up, _bottomGroundRadius, (isScale) ? _bottomGroundDistance /2: _bottomGroundDistance, _slopeLayerMask);
+        bool isGround = RaycastHelper.CheckCircleSide(transform.position, Vector2.down, _bottomGroundRadius,(_isScale) ? _bottomGroundDistance /2 : _bottomGroundDistance, _groundLayerMask);
+        bool isSlope = CheckSlope(-Vector2.up, _bottomGroundRadius, (_isScale) ? _bottomGroundDistance /2: _bottomGroundDistance, _slopeLayerMask);
         bool isCrouch = Input.GetKey(MoveDown);
         bool isLookUp = Input.GetKey(MoveUp);
         bool isShoot = Input.GetKeyDown(ShootKey) && !_allowShoot; // if the player has pressed 
@@ -98,7 +108,7 @@ public class PlayerController : InputHandler
         bool disableCrouch = false;
         //Scale
         Vector2 scaleSize = _playerCapsule.size;
-        scaleSize.y = (isScale) ? 1 : 2;
+        scaleSize.y = (_isScale) ? 1 : 2;
         _playerCapsule.size = scaleSize;
         
         _topStatus.transform.localScale = spriteScaleSize;
@@ -146,9 +156,9 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.1f, (isScale) ? 0.26f : 0.5f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.1f, (_isScale) ? 0.26f : 0.5f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.1f,(isScale) ? 0.3f: 0.6f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.1f,(_isScale) ? 0.3f: 0.6f));
         }
         else if (isRightPressed)
         {
@@ -156,9 +166,9 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.1f, (isScale) ? 0.26f : 0.5f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.1f, (_isScale) ? 0.26f : 0.5f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.1f, (isScale) ? 0.3f: 0.6f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.1f, (_isScale) ? 0.3f: 0.6f));
         }
         _fullStatus.gameObject.SetActive(false);
         //_fullStatus.gameObject.SetActive(isCrouch && isGround);
@@ -384,11 +394,11 @@ public class PlayerController : InputHandler
                 }
             case Direction.Left:
                 {
-                    return origin += (isScale) ? new Vector3(-1.3f, 0.5f, 0.0f)  : new Vector3(-1.3f, 1.2f, 0.0f);
+                    return origin += (_isScale) ? new Vector3(-1.3f, 0.5f, 0.0f)  : new Vector3(-1.3f, 1.2f, 0.0f);
                 }
             case Direction.Right:
                 {
-                    return origin += (isScale) ? new Vector3(1.3f, 0.5f, 0.0f) : new Vector3(1.3f, 1.2f, 0.0f);
+                    return origin += (_isScale) ? new Vector3(1.3f, 0.5f, 0.0f) : new Vector3(1.3f, 1.2f, 0.0f);
                 }
         }
         return Vector3.zero;
@@ -407,15 +417,24 @@ public class PlayerController : InputHandler
         _slopePerpendicular = Vector2.zero;
         return false;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision != null && collision.transform.CompareTag("Boss"))
+        {
+            AudioSource audioSource = Camera.main.GetComponent<AudioSource>();
+            audioSource.clip = BossMusic;
+            audioSource.Play();
+        }
+    }
     private void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
         DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius, Color.red);
-        DrawHelper.DrawRaySphere(Vector2.down, (isScale) ? _bottomGroundDistance / 2 :_bottomGroundDistance, _bottomGroundRadius, Color.red);
-        Vector2 BoxSize = (isScale) ? new Vector2(0.2f,0.55f) : _sideBoxSize;
+        DrawHelper.DrawRaySphere(Vector2.down, (_isScale) ? _bottomGroundDistance / 2 :_bottomGroundDistance, _bottomGroundRadius, Color.red);
+        Vector2 BoxSize = (_isScale) ? new Vector2(0.2f,0.55f) : _sideBoxSize;
         DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, BoxSize); 
         DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, BoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);
-        DrawHelper.DrawCapsule(((isScale) ? _playerHeight /2 : _playerHeight), 0.5f);
+        DrawHelper.DrawCapsule(((_isScale) ? _playerHeight /2 : _playerHeight), 0.5f);
     }
 }
