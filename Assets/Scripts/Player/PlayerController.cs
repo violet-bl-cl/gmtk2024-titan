@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class PlayerController : InputHandler
 {
@@ -29,7 +27,7 @@ public class PlayerController : InputHandler
     private Vector2 _sideBoxSize = new Vector2(0.2f, 1.3f);
     private float _sideBoxDistance = 0.5f;
     private float _bottomGroundRadius = 0.1f;
-    private float _bottomGroundDistnace = 1.1f;
+    private float _bottomGroundDistance = 1.1f;
     private Vector2 _topHeadBoxSize = new Vector2(0.4f, 1.5f);
     private float _topHeadBoxDistance = 0.5f;
     private float _topHeadRadius = 0.5f;
@@ -60,7 +58,9 @@ public class PlayerController : InputHandler
 
     //Player health.
     private PlayerHealth _playerHealth;
-
+    // switch scale 
+    [SerializeField]
+    private bool isScale = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,14 +72,21 @@ public class PlayerController : InputHandler
         _topStatus = transform.GetComponentInChildren<TopActionStatus>(true);
         _playerHealth = GetComponent<PlayerHealth>();
     }
+    void Update()
+    {
+        if (Input.GetKeyDown(SwitchScaleKey))
+        {
+            isScale = !isScale;
+        }
+    }
     void FixedUpdate()
     {
         if (_playerHealth.isDead) return;
         float horizontal = Input.GetAxis("Horizontal");
         bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
         bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveRight);
-        bool isGround = RaycastHelper.CheckCircleSide(transform.position, Vector2.down, _bottomGroundRadius, _bottomGroundDistnace, _groundLayerMask);
-        bool isSlope = CheckSlope(-Vector2.up, _bottomGroundRadius, _bottomGroundDistnace, _slopeLayerMask);
+        bool isGround = RaycastHelper.CheckCircleSide(transform.position, Vector2.down, _bottomGroundRadius,(isScale) ? _bottomGroundDistance /2 : _bottomGroundDistance, _groundLayerMask);
+        bool isSlope = CheckSlope(-Vector2.up, _bottomGroundRadius, (isScale) ? _bottomGroundDistance /2: _bottomGroundDistance, _slopeLayerMask);
         bool isCrouch = Input.GetKey(MoveDown);
         bool isLookUp = Input.GetKey(MoveUp);
         bool isShoot = Input.GetKeyDown(ShootKey) && !_allowShoot; // if the player has pressed 
@@ -87,6 +94,11 @@ public class PlayerController : InputHandler
         bool isAnyDirectionKeyNotPressed = !isLeftPressed || !isRightPressed;
         float movementSpeed = (isCrouch && isGround) ? 0.0f : _movementSpeed;
         bool disableCrouch = false;
+
+        //Scale
+        Vector2 scaleSize = _playerCapsule.size;
+        scaleSize.y = (isScale) ? 2 : 1;
+        _playerCapsule.size = scaleSize;
 
         if (isAnyDirectionKeyPressed && !isSlope && !_disableInput)
         {
@@ -396,10 +408,10 @@ public class PlayerController : InputHandler
     {
         DrawHelper.SetTransform(transform);
         DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius, Color.red);
-        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistnace, _bottomGroundRadius, Color.red);
+        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistance, _bottomGroundRadius, Color.red);
         DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);
-        DrawHelper.DrawCapsule(_playerHeight, 0.5f);
+        DrawHelper.DrawCapsule(((isScale) ? _playerHeight /2 : _playerHeight), 0.5f);
     }
 }

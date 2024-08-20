@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 public class EnemyBoss : Enemy
 {
+    [SerializeField]
+    private Color _bulletColor;
     [SerializeField]
     private EnemyAction _enemyAction = EnemyAction.Idle;
     [SerializeField]
@@ -25,15 +28,6 @@ public class EnemyBoss : Enemy
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         enemyRigidBody = GetComponent<Rigidbody2D>();
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            _enemyAction = EnemyAction.Hit;
-            _enemyHealth -= 20.0f;
-            other.transform.gameObject.SetActive(false);
-        }
-    }
     public EnemyBoss(Transform currentObj) : base(currentObj)
     {
     }
@@ -54,12 +48,12 @@ public class EnemyBoss : Enemy
         float differenceX = enemyObj.position.x - targetObj.position.x;
         float distance = (enemyObj.position - targetObj.position).magnitude;
         float followDistance = 3.0f;
-        float attackDistance = 4.0f;
+        float attackDistance = 13.8f;
         switch (_enemyAction)
         {
             case EnemyAction.Idle:
                 {
-                    if (distance < _shootRange && enemyStatus)
+                    if (distance < attackDistance && enemyStatus)
                     {
                         _enemyAction = EnemyAction.Attack;
                     }
@@ -85,6 +79,7 @@ public class EnemyBoss : Enemy
                 }
             case EnemyAction.Attack:
                 {
+                    enemyAnimator.SetBool("IsAttack", true);
                     if (attackCoroutine == null && enemyStatus)
                     {
                         float randomShootTime = Random.Range(0.3f, 0.8f);
@@ -97,6 +92,12 @@ public class EnemyBoss : Enemy
 
                     break;
                 }
+            case EnemyAction.Death:
+                {
+                    enemyAnimator.SetBool("IsAttack", false);
+                    gameObject.SetActive(false);
+                    break;
+                }
         }
         //Animation State!
         ExecuteAction(targetObj, _enemyAction, deltaTime);
@@ -106,44 +107,68 @@ public class EnemyBoss : Enemy
     {
 
         Direction direction = Direction.Right;
-        Vector2 projectilePosition = Vector2.zero;
+        Vector2 projectilePositionLeft = transform.localPosition;
+        Vector2 projectilePositionRight = transform.localPosition;
+
         if (flip) //right
         {
-            projectilePosition = (Vector2)transform.position + new Vector2(-4, 1);
+            projectilePositionLeft.x = projectilePositionLeft.x - 2.0f;
+            projectilePositionLeft.y = projectilePositionLeft.y - 2.0f;
             direction = Direction.Left;
         }
         else
         {
-            projectilePosition = (Vector2)transform.position + new Vector2(4, 1);
+            projectilePositionRight.x = projectilePositionRight.x + 2.0f;
+            projectilePositionRight.y = projectilePositionRight.y - 2.1f;
             direction = Direction.Right;
         }
-        GameObject bullet = ObjectPool.Instance.GetObjectPool();
-        if (bullet != null)
-        {
-              enemyAnimator.SetBool("IsAttack", true);
-            Projectile projectile = bullet.GetComponent<Projectile>();
-            projectile.BulletDirection = direction;
-            projectile.BulletActiveTime = 2.0f;
-            projectile.transform.position = projectilePosition;
-            projectile.gameObject.SetActive(true);
-        }
+        Shoot(direction, projectilePositionLeft);
+        Shoot(direction, projectilePositionRight);
         yield return new WaitForSeconds(delaySecond);
         StopCoroutine(attackCoroutine);
         attackCoroutine = null;
-        _enemyAction = EnemyAction.MoveToPlayer;
+    }
+    private void Shoot(Direction direction, Vector3 projectilePosition)
+    {
+        GameObject bullet = ObjectPool.Instance.GetObjectPool();
+
+        if (bullet != null)
+        {
+            Projectile projectile = bullet.GetComponent<Projectile>();
+            projectile.BulletDirection = direction;
+            projectile.BulletActiveTime = 2.0f;
+            projectile.SpriteRenderer.color = _bulletColor;
+            projectile.transform.position = projectilePosition;
+            projectile.targetName = "Player";
+            projectile.gameObject.SetActive(true);
+        }
     }
     private IEnumerator HitDelay(float delaySecond)
     {
-       // enemyAnimator.SetBool("IsAttack", true);
+        // enemyAnimator.SetBool("IsAttack", true);
         yield return new WaitForSeconds(delaySecond);
         StopCoroutine(hitCoroutine);
         hitCoroutine = null;
         _enemyAction = EnemyAction.MoveToPlayer;
     }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<Projectile>() != null)
+        {
+            Projectile projectile = other.GetComponent<Projectile>();
+            if (other.CompareTag("Bullet") && projectile.targetName =="Enemy")
+            {
+                //_enemyAction = EnemyAction.Hit;
+                _enemyHealth -= 20.0f;
+                other.transform.gameObject.SetActive(false);
+            }
+        }
+    }
+
     void OnDrawGizmos()
     {
         DrawHelper.SetTransform(transform);
-        DrawHelper.DrawRaySphere(Vector2.up, 0, _shootRange,Color.red);
-        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection,Color.green);
+        DrawHelper.DrawRaySphere(Vector2.up, 0, _shootRange, Color.red);
+        DrawHelper.DrawRaySphere(Vector2.up, 0.0f, playerDetection, Color.green);
     }
 }
