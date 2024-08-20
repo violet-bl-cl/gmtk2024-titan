@@ -82,9 +82,11 @@ public class PlayerController : InputHandler
     void FixedUpdate()
     {
         if (_playerHealth.isDead) return;
+        Vector2 boxSize = (isScale) ? new Vector2(0.2f, 0.55f) : _sideBoxSize;
+        Vector3 spriteScaleSize = (isScale) ? new Vector3(0.5f, 0.5f, 0.5f) : new Vector3(1.0f, 1.0f, 1.0f);
         float horizontal = Input.GetAxis("Horizontal");
-        bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
-        bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, _sideBoxSize, _groundLayerMask) && Input.GetKey(MoveRight);
+        bool isLeftPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.left, _sideBoxDistance, boxSize, _groundLayerMask) && Input.GetKey(MoveLeft);
+        bool isRightPressed = !RaycastHelper.CheckBoxSide(transform.position, Vector2.right, _sideBoxDistance, boxSize, _groundLayerMask) && Input.GetKey(MoveRight);
         bool isGround = RaycastHelper.CheckCircleSide(transform.position, Vector2.down, _bottomGroundRadius,(isScale) ? _bottomGroundDistance /2 : _bottomGroundDistance, _groundLayerMask);
         bool isSlope = CheckSlope(-Vector2.up, _bottomGroundRadius, (isScale) ? _bottomGroundDistance /2: _bottomGroundDistance, _slopeLayerMask);
         bool isCrouch = Input.GetKey(MoveDown);
@@ -94,12 +96,13 @@ public class PlayerController : InputHandler
         bool isAnyDirectionKeyNotPressed = !isLeftPressed || !isRightPressed;
         float movementSpeed = (isCrouch && isGround) ? 0.0f : _movementSpeed;
         bool disableCrouch = false;
-
         //Scale
         Vector2 scaleSize = _playerCapsule.size;
-        scaleSize.y = (isScale) ? 2 : 1;
+        scaleSize.y = (isScale) ? 1 : 2;
         _playerCapsule.size = scaleSize;
-
+        
+        _topStatus.transform.localScale = spriteScaleSize;
+        _botStatus.transform.localScale = spriteScaleSize;
         if (isAnyDirectionKeyPressed && !isSlope && !_disableInput)
         {
             Vector2 movePosition = new Vector2(horizontal * _forceAmount * movementSpeed, 0.0f);
@@ -143,9 +146,9 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, true, new Vector2(0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.1f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, true, new Vector2(0.1f, (isScale) ? 0.26f : 0.5f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.1f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, true, new Vector2(0.1f,(isScale) ? 0.3f: 0.6f));
         }
         else if (isRightPressed)
         {
@@ -153,9 +156,9 @@ public class PlayerController : InputHandler
             //Full Animation
             SpriteHelper.ChangeSpritePosition(_fullStatus.gameObject, false, new Vector2(-0.1f, -1.0f));
             //Top animation
-            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.1f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_topStatus.gameObject, false, new Vector2(-0.1f, (isScale) ? 0.26f : 0.5f));
             //Bottom animation
-            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.1f, 0.9f));
+            SpriteHelper.ChangeSpritePosition(_botStatus.gameObject, false, new Vector2(-0.1f, (isScale) ? 0.3f: 0.6f));
         }
         _fullStatus.gameObject.SetActive(false);
         //_fullStatus.gameObject.SetActive(isCrouch && isGround);
@@ -381,11 +384,11 @@ public class PlayerController : InputHandler
                 }
             case Direction.Left:
                 {
-                    return origin += new Vector3(-1.3f, 1.6f, 0.0f);
+                    return origin += (isScale) ? new Vector3(-1.3f, 0.5f, 0.0f)  : new Vector3(-1.3f, 1.2f, 0.0f);
                 }
             case Direction.Right:
                 {
-                    return origin += new Vector3(1.3f, 1.6f, 0.0f);
+                    return origin += (isScale) ? new Vector3(1.3f, 0.5f, 0.0f) : new Vector3(1.3f, 1.2f, 0.0f);
                 }
         }
         return Vector3.zero;
@@ -408,9 +411,10 @@ public class PlayerController : InputHandler
     {
         DrawHelper.SetTransform(transform);
         DrawHelper.DrawRaySphere(Vector2.up, _topHeadDistance, _topHeadRadius, Color.red);
-        DrawHelper.DrawRaySphere(Vector2.down, _bottomGroundDistance, _bottomGroundRadius, Color.red);
-        DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, _sideBoxSize);
-        DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, _sideBoxSize);
+        DrawHelper.DrawRaySphere(Vector2.down, (isScale) ? _bottomGroundDistance / 2 :_bottomGroundDistance, _bottomGroundRadius, Color.red);
+        Vector2 BoxSize = (isScale) ? new Vector2(0.2f,0.55f) : _sideBoxSize;
+        DrawHelper.DrawRayBox(Vector2.right, _sideBoxDistance, BoxSize); 
+        DrawHelper.DrawRayBox(Vector2.left, _sideBoxDistance, BoxSize);
         DrawHelper.DrawyRayLine(Vector2.down, _playerHeight + _groundRay);
         DrawHelper.DrawCapsule(((isScale) ? _playerHeight /2 : _playerHeight), 0.5f);
     }

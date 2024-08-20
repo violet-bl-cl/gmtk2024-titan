@@ -46,7 +46,7 @@ Animator:
   m_GameObject: {fileID: 7765436166813719171}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d0687f7a00446f0abb1b4b483603a0cf, type: 2}
+  m_Controller: {fileID: 9100000, guid: 75beba96127f2b307b3156c79d11134e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1563979294, guid: 597f9c46cfb8c278a898017d336cfdbc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f66582b29ece51445bea56aeaf5bb9f1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -142,7 +142,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 4.3}
+  m_Size: {x: 1, y: 3.2}
   m_Direction: 0
 --- !u!50 &7420259375442193077
 Rigidbody2D:
@@ -186,10 +186,12 @@ MonoBehaviour:
   _walkSpeed: 3
   _runSpeed: 0
   _attackSpeed: 0
+  _bulletColor: {r: 0.06074225, g: 0.49526373, b: 0.8584906, a: 1}
   _enemyAction: 0
   _enemyHealth: 100
   _movementSpeed: 0
-  _shootRange: 0
+  _shootRange: 15
+  shootPosition: {x: 1.6, y: 0.7, z: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 128
